@@ -1,0 +1,87 @@
+  ,----------\
+ / ,---------/
+/ /
+| |  Write your VHDL code:
+\ \
+ \ `---------\
+  `----------/
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity full_adder is
+	port (
+		a, b: in std_logic;
+		sum, carry: out std_logic);
+end entity;
+
+architecture behaviour of full_adder is
+begin
+	sum <= a xor b;
+	carry <= a and b;
+end behaviour;
+
+  ,----------\
+ / ,---------/
+/ /
+| |  Write a test bench:
+\ \
+ \ `---------\
+  `----------/
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity full_adder_tb is end entity;
+
+architecture arc of full_adder_tb is
+	component full_adder
+		port (
+			a, b: in std_logic;
+			sum, carry: out std_logic);
+	end component;
+	signal a, b, sum, carry: std_logic;
+	signal counter: unsigned(1 downto 0):= (others=>'0');
+begin
+	c1_and : full_adder port map(a=>a, b=>b, sum=>sum, carry=>carry);
+	a <= counter(0);
+	b <= counter(1);
+	process is
+	begin
+		for k in 0 to 3 loop
+			wait for 1 fs;
+			counter <= counter + 1;
+		end loop;
+		assert false report "Finished testing 'full_adder'";
+		wait;
+	end process;
+end architecture;
+
+  ,----------\
+ / ,---------/
+/ /
+| |  Run the commands:
+\ \
+ \ `---------\
+  `----------/
+  
+ghdl -s full_adder.vhd
+ghdl -s full_adder-tb.vhd
+
+ghdl -a full_adder.vhd
+ghdl -a full_adder-tb.vhd
+
+ghdl -e full_adder_tb
+
+ghdl -r full_adder_tb --vcd=full_adder_tb.vcd
+
+gtkwave full_adder_tb.vcd
+
+  ,----------\
+ / ,---------/
+/ /
+| |  That's it!
+\ \
+ \ `---------\
+  `----------/
